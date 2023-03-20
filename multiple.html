@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Multiple Input</title>
+</head>
+<body class="h-screen mt-5">
+<div class="flex flex-col justify-center items-center ">
+    <form>
+        <div class="input-group">
+            <input class="appearance-none inline-block bg-gray-200 text-gray-700 border border-gray-500 rounded mr-3 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   type="text" placeholder="klub 1" name="klub1[]">
+
+            <input class="appearance-none inline-block bg-gray-200 text-gray-700 border border-gray-500 rounded mr-3 -ml-1 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   type="text" placeholder="klub 2" name="klub2[]">
+            <input class="appearance-none inline-block w-20 bg-gray-200 text-gray-700 border border-gray-500 rounded mr-4 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   type="number" placeholder="0" name="skor1[]">
+            <input class="appearance-none inline-block w-20 bg-gray-200 text-gray-700 border border-gray-500 rounded mr-4 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                   type="number" placeholder="0" name="skor2[]">
+        </div>
+    </form>
+    <p class="text-red-500 text-xs italic text-center" id="message"></p>
+    <div class="mt-6">
+        <!-- Button Save   -->
+        <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                type="button" id="save">Save
+        </button>
+
+        <!--  Button Add  -->
+        <button class="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold mx-1 py-2 px-4 rounded"
+                type="button" id="add">add
+        </button>
+
+        <!--  Button Back  -->
+        <button type="button" onclick="history.go(-1)"
+                class="shadow bg-gray-500 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer">
+            Back
+        </button>
+    </div>
+</div>
+
+<script>
+    const btn = document.getElementById('add')
+    const btnSave = document.getElementById('save')
+    const form = document.querySelector('form')
+    const message = document.getElementById('message')
+
+    btnSave.addEventListener('click', function (event) {
+        event.preventDefault()
+        let dataForm = new FormData(form)
+        fetch('proses/multiple.php', {
+            method: 'POST',
+            body: dataForm
+        }).then(response => response.json())
+            .then(data => {
+                if (data.status == false) {
+                    message.classList.remove('text-green-500')
+                    message.innerText = data.message
+                } else {
+                    message.classList.add('text-green-500')
+                    message.innerText = data.message
+                    setTimeout(() => {
+                        message.innerText = ''
+                    }, 3000)
+                }
+            })
+    })
+
+    btn.addEventListener('click', function add() {
+        let newGroupInput = document.createElement('div')
+
+        let klub1 = document.createElement('input')
+        setAttributes(klub1, {
+            'class': "appearance-none inline-block bg-gray-200 text-gray-700 border border-gray-500 rounded mr-3 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+            'type': 'text', 'name': 'klub1[]'})
+
+        let klub2 = document.createElement('input')
+        setAttributes(klub2, {
+            'class': "appearance-none inline-block bg-gray-200 text-gray-700 border border-gray-500 rounded mr-3 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+            'type': 'text', 'name': "klub2[]"})
+
+        let skor1 = document.createElement('input')
+        setAttributes(skor1, {
+            'class': "appearance-none inline-block w-20 bg-gray-200 text-gray-700 border border-gray-500 rounded mr-4 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+            'type': 'number', 'name': "skor1[]"})
+
+        let skor2 = document.createElement('input')
+        setAttributes(skor2, {
+            'class': "appearance-none inline-block w-20 bg-gray-200 text-gray-700 border border-gray-500 rounded mr-4 py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500",
+            'type': 'number', 'name': "skor2[]"})
+
+        newGroupInput.appendChild(klub1)
+        newGroupInput.appendChild(klub2)
+        newGroupInput.appendChild(skor1)
+        newGroupInput.appendChild(skor2)
+        form.append(newGroupInput)
+    })
+
+    function setAttributes(el, attrs) {
+        for (var key in attrs) {
+            el.setAttribute(key, attrs[key]);
+        }
+    }
+</script>
+</body>
+</html>

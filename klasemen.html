@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Klasemen Liga</title>
+</head>
+<body>
+<div class="flex justify-center items-center flex-col h-screen">
+    <h1 class="font-bold text-2xl my-4">Klasemen Liga Bri</h1>
+    <table class="border border-gray-500">
+        <thead>
+        <tr class="border-b">
+            <th class="px-16 py-2">Klub</th>
+            <th class="px-4 py-2">Ma</th>
+            <th class="px-4 py-2">Me</th>
+            <th class="px-4 py-2">S</th>
+            <th class="px-4 py-2">K</th>
+            <th class="px-4 py-2">GM</th>
+            <th class="px-4 py-2">GK</th>
+            <th class="px-4 py-2">Point</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+    </table>
+    <button type="button" onclick="history.go(-1)"
+            class="shadow bg-gray-500 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 my-3 rounded cursor-pointer">
+        Back
+    </button>
+</div>
+
+<script>
+    const tbody = document.getElementById('tbody');
+    fetch('proses/klesemen.php', {
+        method: 'GET',
+    }).then(responses => responses.json())
+        .then(data => {
+            console.info(data)
+            data.forEach(function (value) {
+                tbody.innerHTML += `
+                   <tr class="border-b">
+                        <td class="px-16 py-2">${value.klub}</td>
+                        <td class="px-4 py-2">${value.ma}</td>
+                        <td class="px-4 py-2">${value.me}</td>
+                        <td class="px-4 py-2">${value.s}</td>
+                        <td class="px-4 py-2">${value.k}</td>
+                        <td class="px-4 py-2">${value.gm}</td>
+                        <td class="px-4 py-2">${value.gk}</td>
+                        <td class="px-4 py-2">${value.point}</td>
+                    </tr>`;
+            })
+        })
+</script>
+</body>
+</html>

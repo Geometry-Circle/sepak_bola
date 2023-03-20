@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <title>Input Klub</title>
+</head>
+<body>
+<div class="flex justify-center items-center h-screen">
+    <form class="w-full max-w-sm" id="form">
+        <h1 class="text-center text-xl text-gray-500 font-bold mb-6">Input Data Klub</h1>
+
+        <div class="md:flex md:items-center mb-6">
+            <div class="md:w-1/3">
+                <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                    Nama Klub
+                </label>
+            </div>
+            <div class="md:w-2/3">
+                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                       id="inline-full-name" type="text" name="klub" required>
+            </div>
+        </div>
+
+        <div class="md:flex md:items-center mb-3">
+            <div class="md:w-1/3">
+                <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
+                    Kota Klub
+                </label>
+            </div>
+            <div class="md:w-2/3">
+                <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                       type="text" name="kota" required>
+            </div>
+        </div>
+
+        <p class="text-red-500 text-xs italic text-center mb-4" id="message"></p>
+
+        <div class="md:flex md:items-center">
+            <div class="md:w-1/3"></div>
+            <div class="md:w-2/3">
+                <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                        type="submit">
+                    Save
+                </button>
+                <button type="button" onclick="history.go(-1)"
+                        class="shadow bg-gray-500 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer">
+                    Back
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+    const form = document.getElementById('form')
+    const message = document.getElementById('message')
+
+    form.addEventListener('submit', submit)
+
+    function submit(event) {
+        event.preventDefault()
+        let formData = new FormData(form)
+        fetch('proses/insertKlub.php', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.json())
+            .then(data => {
+                if (data.status == false) {
+                    message.classList.remove('text-green-500')
+                    message.innerText = data.message
+                } else {
+                    message.classList.add('text-green-500')
+                    message.innerText = data.message
+                    setTimeout(()=>{
+                        message.innerText = ''
+                    }, 3000)
+                }
+            })
+    }
+</script>
+</body>
+</html>
